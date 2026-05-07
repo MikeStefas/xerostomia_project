@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userID      Int      @id @default(autoincrement())
+  email       String   @unique
+  firstName   String   @default("-")
+  lastName    String   @default("-")
+  password    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  role        String   @default("PATIENT")
+  institution String   @default("-")
+
+  demographicData DemographicData?
+  reports         Report[]         @relation("Reports")
+  clinicianPairs  Pairs[]          @relation("ClinicianPairs")
+  patientPairs    Pairs[]          @relation("PatientPairs")
+}
+
+model Report {
+  reportId     Int      @id @default(autoincrement())
+  userID       Int
+  createdAt    DateTime @default(now())
+  file1        String
+  file2        String
+  file3        String
+  file4        String
+  result1      Float
+  result2      Float
+  result3      Float
+  result4      Float
+  result_total Float
+
+  user User @relation("Reports", fields: [userID], references: [userID])
+}
+
+model Pairs {
+  pairId      Int @id @default(autoincrement())
+  clinicianID Int
+  patientID   Int
+
+  clinician User @relation("ClinicianPairs", fields: [clinicianID], references: [userID])
+  patient   User @relation("PatientPairs", fields: [patientID], references: [userID])
+}
+
+model DemographicData {
+  demographicDataId Int    @id @default(autoincrement())
+  userID            Int    @unique
+  yearOfBirth       Int
+  gender            String
+
+  user User @relation(fields: [userID], references: [userID])
+}
