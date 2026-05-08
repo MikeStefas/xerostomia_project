@@ -1,0 +1,7 @@
+api.xerostomia.local {
+    reverse_proxy xerostomia_backend_api:5000
+}
+
+xerostomia.local {
+    reverse_proxy xerostomia_frontend:3000
+}

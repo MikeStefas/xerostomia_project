@@ -1,0 +1,96 @@
+services:
+  xerostomia_backend_api:
+    build:
+      context: ./xerostomia-backend
+      dockerfile: Dockerfile
+    container_name: xerostomia_backend_api
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./xerostomia-backend/.env
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@xerostomia_db:5432/${POSTGRES_DB}?sslmode=disable
+      - NEXTCLOUD_URL=${NEXTCLOUD_URL}
+      - FASTAPI_URL=${FASTAPI_URL}
+    depends_on:
+      - xerostomia_db
+      - nextcloud
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - xerostomia
+
+  xerostomia_db:
+    image: postgres:13
+    container_name: postgres-xerostomia-db
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - xerostomia_db_data:/var/lib/postgresql/data
+    networks:
+      - xerostomia
+
+  nextcloud:
+    image: nextcloud:33
+    container_name: xerostomia_nextcloud
+    ports:
+      - "8080:80"
+    environment:
+      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
+      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
+      - NEXTCLOUD_TRUSTED_DOMAINS=${NEXTCLOUD_TRUSTED_DOMAINS}
+    volumes:
+      - nextcloud_data:/var/www/html
+    networks:
+      - xerostomia
+
+  #xerostomia_ai_microservice:
+  #  build:
+  #    context: ./xerostomia-ai-microservice
+  #    dockerfile: Dockerfile
+  #  container_name: xerostomia_ai_microservice
+  #  ports:
+  #    - "8000:8000"
+  #  networks:
+  #    - xerostomia
+
+  xerostomia_frontend:
+    build:
+      context: ./xerostomia-frontend
+      dockerfile: Dockerfile
+    container_name: xerostomia_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - BACKEND_URL=${BACKEND_URL}
+    depends_on:
+      - xerostomia_backend_api
+    networks:
+      - xerostomia
+
+  caddy:
+    image: caddy:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    depends_on:
+      - xerostomia_backend_api
+      - xerostomia_frontend
+      - nextcloud
+      - xerostomia_db
+    networks:
+      - xerostomia
+
+
+networks:
+  xerostomia:
+
+volumes:
+  xerostomia_db_data:
+  nextcloud_data:
