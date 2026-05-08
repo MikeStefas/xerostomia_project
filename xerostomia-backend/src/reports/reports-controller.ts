@@ -14,7 +14,6 @@ import {
 } from '@nestjs/common';
 import { ReportsService } from './reports-service';
 import { JwtGuard } from 'guard';
-import { reportDto } from 'src/reports/report-dto';
 import { BasicUserInfo } from 'src/auth/auth-dto';
 import { Role } from 'src/enums/role-enum';
 import {  FilesInterceptor } from '@nestjs/platform-express';
@@ -43,13 +42,11 @@ export class ReportsController {
   @UsePipes(new ValidationPipe({ whitelist: true }))
   generateReport(
     @Request() req: BasicUserInfo,
-    @Body() body: reportDto,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
     return this.reportsService.generateReport(
       req.user.userID,
       req.user.role as Role,
-      body,
       files,
     );
   }

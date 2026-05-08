@@ -5,12 +5,10 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma-service';
-import { reportDto } from './report-dto';
 import { Role } from 'src/enums/role-enum';
 import { ConfigService } from '@nestjs/config';
 import { createClient, WebDAVClient } from 'webdav';
 import microserviceLLMCall, { cleanupFiles, getReports, uploadImages } from './actions';
-import * as fs from 'fs';
 
 import { DoesXExist } from 'src/methods/does-x-exist';
 
@@ -70,7 +68,6 @@ export class ReportsService {
   async generateReport(
     requesterID: number,
     requesterRole: Role,
-    body: reportDto,
     files?: Express.Multer.File[],
   ) {
     if (files?.length != 4) throw new BadRequestException("Please upload 4 images");
