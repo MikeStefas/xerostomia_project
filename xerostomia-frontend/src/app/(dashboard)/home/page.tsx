@@ -7,13 +7,10 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import LinkIcon from "@mui/icons-material/Link";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { getRoleFromCookie } from "@/features/auth/api/get-role-from-cookie";
-import { GetImages } from "@/features/reports/api/get-images";
 
 export default function DashboardPage() {
   const [role, setRole] = useState("");
-  const [images, setImages] = useState<string[]>([]);
   
   useEffect(() => {
     const manageRole = async () => {
@@ -23,15 +20,11 @@ export default function DashboardPage() {
     manageRole();
   }, []);
 
-  const handleGetImages = async () => {
-    const fetchedImages = await GetImages("4", "27");
-    setImages(fetchedImages);
-  };
 
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom color="text.primary">
-        SmileCheck Dashboard
+        Xerostomia Dashboard
       </Typography>
 
       <Box
@@ -161,28 +154,6 @@ export default function DashboardPage() {
         )}
       </Box>
 
-      <Box sx={{ mt: 4 }}>
-        <button onClick={handleGetImages} style={{ padding: '10px 20px', cursor: 'pointer' }}>
-          Get Images
-        </button>
-      </Box>
-
-      {images.length > 0 && (
-        <Box sx={{ mt: 4, display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-          {images.map((src, idx) => (
-            <Card key={idx} sx={{ width: 1000 }}>
-              <Image 
-                src={src} 
-                alt={`Fetched image ${idx}`} 
-                height={1000}
-                width={1000}
-                style={{ width: '100%', height: 'auto', display: 'block' }} 
-              />
-             
-            </Card>
-          ))}
-        </Box>
-      )}
     </Box>
   );
 }

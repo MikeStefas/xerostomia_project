@@ -4,8 +4,8 @@ import { getRoleFromCookie } from "@/features/auth/api/get-role-from-cookie";
 import Providers from "../shared/providers/Providers";
 
 export const metadata: Metadata = {
-  title: "Smilecheck",
-  description: "Smilecheck Dashboard",
+  title: "Xerostomia",
+  description: "Xerostomia Dashboard",
   icons: {
     icon: "/favicon.ico",
   },

@@ -7,8 +7,8 @@ import JoinInnerIcon from "@mui/icons-material/JoinInner";
 import Image from "next/image";
 
 export const BRANDING = {
-  logo: <Image src="/favicon.ico" alt="Smilecheck" width={40} height={40} />,
-  title: "Smilecheck",
+  logo: <Image src="/favicon.ico" alt="Xerostomia" width={40} height={40} />,
+  title: "Xerostomia",
   homeUrl: "/home",
 };
 
@@ -59,11 +59,7 @@ export const NAVIGATION_CLINICIAN: Navigation = [
     title: "Reports",
     icon: <EditDocumentIcon />,
   },
-  {
-    segment: "users",
-    title: "Users",
-    icon: <EditIcon />,
-  },
+
   {
     kind: "divider",
   },

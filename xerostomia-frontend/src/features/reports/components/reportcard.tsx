@@ -27,12 +27,12 @@ export function ReportCard({ report, setselectedReportID }: { report: Report, se
         />
         <HorizontalField 
           label="Result" 
-          value={report.result} 
+          value={report.result_total > 0.5 ? 'Xerostomia' : 'Healthy'} 
           bottomDivider 
         />
         <HorizontalField 
-          label="Status" 
-          value={report.status} 
+          label="Xerostomia Risk Percentage" 
+          value={`${Math.round(report.result_total)}%`} 
         />
       </Stack>
     </Box>

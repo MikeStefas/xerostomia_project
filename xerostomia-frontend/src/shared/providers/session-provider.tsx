@@ -24,6 +24,11 @@ export default function SessionProvider({
         pathname !== "/"
       ) {
         router.replace("/");
+      } else if (
+        role === "CLINICIAN" && 
+        (pathname.startsWith("/pairs") || pathname.startsWith("/users"))
+      ) {
+        router.replace("/home");
       }
     };
     manageRole();
