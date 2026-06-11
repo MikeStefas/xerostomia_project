@@ -12,6 +12,7 @@ services:
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@xerostomia_db:5432/${POSTGRES_DB}?sslmode=disable
       - NEXTCLOUD_URL=${NEXTCLOUD_URL}
       - FASTAPI_URL=${FASTAPI_URL}
+      - TS_NODE_PROJECT=tsconfig.prod.json
     depends_on:
       - xerostomia_db
       - nextcloud

@@ -144,7 +144,7 @@ export class ReportsService {
       }
 
       const contents = await this.webdavClient.getDirectoryContents(remoteDir);
-      const files = Array.isArray(contents) ? contents : contents.data;
+      const files = Array.isArray(contents) ? contents : (contents as any).data;
 
       const imageBuffers = await Promise.all(
         files.map(async (file) => {
